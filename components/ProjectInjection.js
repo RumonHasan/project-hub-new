@@ -1,26 +1,28 @@
 import { useState } from "react";
-const ProjectInjection = ()=>{  
-    // states
-    const [name, setName] = useState('');
-    const [image, setImage] = useState('');
-    const [category, setCategory] = useState('');
-    const [link, setLink] = useState('');
-    const [description, setDescription] = useState('');
-    const [stack, setStack] = useState([]);
-    const [singleTechStack, setSingleTechStack] = useState('');
+import { useForm } from "@mantine/form";
+import { TextInput, Button, Group, Box, Select, FileInput } from "@mantine/core";
+import { IconUpload } from "@tabler/icons";
 
-    // styles
-    const injectionStyles = {
-        display:'flex',
-        flexDirection: 'column',
-        maxWidth: '50%',
-        justifyContent:'center',
-        alignItems: 'center'
-    }
-    const formStyles = {
-        display:'flex',
-        flexDirection: 'column',
-    }
+const ProjectInjection = ()=>{  
+    const [formValues, setFormValues] = useState({});
+    // handle form
+    const projectForm = useForm({
+        initialValues:{
+            name: '',
+            category: '',
+            link: '',
+            description: '',
+            stack:''
+        }
+    });
+    // select
+    const [selectValue, setSelectValue] = useState('');
+    const selectData = [
+        'React JS',
+        'Vanilla JS',
+        'HTML/CSS'
+    ]
+
 
     // function handlers
     const handleImageFile = ()=>{
@@ -30,8 +32,9 @@ const ProjectInjection = ()=>{
 
     }
 
-    const handleSubmit = (e)=>{
-        e.preventDefault();
+    const handleSubmit = ()=>{
+        
+        console.log(pr)
         try{
 
         }catch(error){
@@ -40,18 +43,53 @@ const ProjectInjection = ()=>{
     }
 
     return (
-        <div style={injectionStyles}>
-            <div style={formStyles}>
-                <input type='text' placeholder="name" value={name} onChange={(e)=> setName(e.target.value)}/>
-                <input type='text' placeholder="category" value={category} onChange={(e)=> setCategory(e.target.value)}/>
-                <input type='text' placeholder="link" value={link} onChange={(e)=> setLink(e.target.value)}/>
-                <input type='text' placeholder="description" value={description} onChange={(e)=> setDescription(e.target.value)}/>
-                <input type='text' placeholder="stack" value={singleTechStack} onChange={(e)=>setSingleTechStack(e.target.value)}/>
-                <input type='file' placeholder="image" accept='image/*' onChange={handleImageFile}/>
-                <button onClick={handleSubmit}>Submit</button>
-            </div>
-            
-        </div>
+        <Box sx={{maxWidth: 400}} mx='auto'>
+            <form onSubmit={projectForm.onSubmit((values)=> setFormValues(values))}>
+                <TextInput
+                    label='Name'
+                    placeholder="Enter Project Name"
+                    {...projectForm.getInputProps('name')}
+                />
+                
+                
+                <TextInput
+                    label='Category'
+                    placeholder="Enter Project Category"
+                    {...projectForm.getInputProps('category')}
+                />
+
+                <FileInput
+                    placeholder="Pick an Image file"
+                    label='Upload an image'
+                    accept="image/png,image/jpeg"
+                    icon={<IconUpload size={14}/>}
+                />
+
+                <Select
+                    label='Select the Tect Stack'
+                    placeholder="Choose The Tech Stack"
+                    searchable
+                    nothingFound='Stack not Available'
+                    data={selectData}
+                    {...projectForm.getInputProps('stack')}
+                />
+
+                <TextInput
+                    label='Link'
+                    placeholder="Enter Project Link"
+                    {...projectForm.getInputProps('link')}
+                />
+
+                <TextInput
+                    label='Description'
+                    placeholder="Enter Project Description"
+                    {...projectForm.getInputProps('description')}
+                />
+                <Group position="right" mt='md'>
+                    <Button type='submit'>Submit Project</Button>
+                </Group>
+            </form>
+        </Box>
     )
 }
 export default ProjectInjection;
